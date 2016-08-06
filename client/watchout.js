@@ -8,10 +8,12 @@
 6. Use css3 animations to make the enemies whirling shuriken.
 */
 
-//globals
-var height = 800;
-var width = 800;
-var numOfEnemies = 4;
+gameRules = {
+  height: 800,
+  width: 800,
+  numOfEnemies: 4
+};
+
 //refactor later
 var enemyData;
 var cursorCoordinates;
@@ -20,15 +22,15 @@ var bally;
 
 
 var Enemy = function(id) {
-  this.x = Math.random() * height;
-  this.y = Math.random() * width;
+  this.x = Math.random() * gameRules.height;
+  this.y = Math.random() * gameRules.width;
   //remove if necessary
   this.id = id;
 };
 
 var createEnemyData = function() {
   var enemies = [];
-  for (var i = 0; i < numOfEnemies; i++) {
+  for (var i = 0; i < gameRules.numOfEnemies; i++) {
     enemies.push(new Enemy(i));
   }
 
@@ -127,8 +129,8 @@ var currentScore = function() {
 };
 
 var svg = d3.select('.board').append('svg')
-                  .attr('height', height)
-                  .attr('width', width);
+                  .attr('height', gameRules.height)
+                  .attr('width', gameRules.width);
 
 drawEnemies();
 setInterval(updateEnemyPositions, 1000);
