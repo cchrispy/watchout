@@ -178,7 +178,8 @@ var svg = d3.select('.board').append('svg')
   .attr('width', gameBoard.width)
   .attr('height', gameBoard.height);
 
-svg.selectAll('circle').data(_.range(1, gameBoard.enemies))
+// svg.selectAll('circle').data(_.range(1, gameBoard.enemies))
+svg.selectAll('circle').data([1,2,3,4,5,6,7,8,9])
   .enter()
   .append('circle')
   .attr('fill', 'black')
@@ -242,4 +243,18 @@ function update() {
     });
 }
 
-setInterval(update, 1500);
+function collisionCheck() {
+  var enemy = svg.selectAll('.enemy');
+  var playerX = svg.select('.player').attr('cx');
+  var playerY = svg.select('.player').attr('cy');
+  enemy[0].forEach(function(circle) {
+    if (Math.abs(circle.cx.animVal.value - playerX) < 10 && Math.abs(circle.cy.animVal.value - playerY) < 10) {
+      console.log('collision detected');
+    }
+  })
+}
+
+// collisionCheck();
+setInterval(collisionCheck, 50);
+// update();
+setInterval(update, 1000);
