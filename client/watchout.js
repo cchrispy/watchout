@@ -11,12 +11,16 @@
 //globals
 var height = 800;
 var width = 800;
-var numOfEnemies = 100;
+var numOfEnemies = 50;
+//refactor later
+var enemyData;
+var cursorCoordinates;
 
-//used to generate dataset
+
 var Enemy = function(id) {
   this.x = Math.random() * height;
   this.y = Math.random() * width;
+  //remove if necessary
   this.id = id;
 };
 
@@ -30,7 +34,8 @@ var createEnemyData = function() {
 };
 
 var drawEnemies = function() {
-  d3.select('svg').selectAll('circle').data(createEnemyData())
+  enemyData = createEnemyData();
+  d3.select('svg').selectAll('circle').data(enemyData)
     .enter().append('circle')
     .attr('fill', 'red')
     .attr('class', 'enemy')
@@ -41,7 +46,62 @@ var drawEnemies = function() {
       return d.y;
     })
     .attr('r', '10px')
+    .on('mouseenter', function() {
+      console.log('collision');
+    })
   ;
+};
+
+var updateEnemyPositions = function() {
+
+  enemyData = createEnemyData();
+  //select all enemies
+  d3.select('svg').selectAll('circle').data(enemyData)
+  //apply a transition so they move
+    .transition().duration(1000)
+  //update attributes cx and cy
+    .attr('cx', function(d) {
+      // check if x and y are touching the mouse
+      // then reset score
+      return d.x;
+    })
+    .attr('cy', function(d) {
+      return d.y;
+    });
+  
+  console.log(d3.interpolate(1, 6)(2));
+};
+
+var makeCursor = function() {
+  d3.select('svg').selectAll('circle').data([{id: 'cursor'}], function(d) {
+    return d.id;
+  })
+    .enter().append('circle')
+    .attr('fill', 'green')
+    .attr('class', 'cursor')
+    .on('mousemove', function() {
+      // update the this.attr()
+      this.attr('cx', cursorCoordinates[0]);
+      this.attr('cy', cursorCoordinates[1]);
+    }.bind(this))
+    .attr('r', '10px')
+  ;
+};
+
+
+var updateCursorPosition = function() {
+  svg.on('mousemove', function() {
+    cursorCoordinates = d3.mouse(this);
+  });
+};
+
+
+var collisionDetect = function() {
+  //track mouse coordinates
+  //compare against enemy coordinates
+  //loop through enemy data
+
+  //if any enemy within n pixels of mouse, reset score
 };
 
 var svg = d3.select('.board').append('svg')
@@ -49,7 +109,10 @@ var svg = d3.select('.board').append('svg')
                   .attr('width', width);
 
 drawEnemies();
+setInterval(updateEnemyPositions, 1000);
 
+updateCursorPosition();
+makeCursor();
 // on the board make enemies
 // data should be their {id: number, x: x, y: y}
 
