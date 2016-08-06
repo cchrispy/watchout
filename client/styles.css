@@ -11,3 +11,20 @@ svg {
 .board {
   text-align: center;
 }
+
+image {
+  transform-origin: 40px 40px 40px;
+  -webkit-animation-name:             rotate; 
+  -webkit-animation-duration:         1s; 
+  -webkit-animation-iteration-count:  infinite;
+  -webkit-animation-timing-function:  ease-out;
+}
+
+@keyframes rotate {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(360deg);
+    }
+}
