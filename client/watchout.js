@@ -15,6 +15,8 @@ var numOfEnemies = 4;
 //refactor later
 var enemyData;
 var cursorCoordinates;
+var ballx;
+var bally;
 
 
 var Enemy = function(id) {
@@ -46,15 +48,19 @@ var drawEnemies = function() {
       return d.y;
     })
     .attr('r', '100px')
+    /*
     .on('mouseenter', function() {
+      //reset
+      //high score
       console.log('collision');
     })
+    */
   ;
 };
 
 var updateEnemyPositions = function() {
-
   enemyData = createEnemyData();
+  console.log(enemyData);
   //select all enemies
   d3.select('svg').selectAll('circle').data(enemyData)
   //apply a transition so they move
@@ -71,19 +77,33 @@ var updateEnemyPositions = function() {
 };
 
 var makeBall = function() {
-  var ball = d3.select('svg').selectAll('circle').data([{id: 'cursor'}], function(d) {
+  var ball = d3.select('svg').selectAll('circle').data([{id: 'ball'}], function(d) {
     return d.id;
   });
 
+  //ball position update and collision detection
   var drag = d3.behavior.drag()
     .on('drag', function() {
       ball.attr('cx', cursorCoordinates[0]);
       ball.attr('cy', cursorCoordinates[1]);
+
+      //apply collision detection when dragging
+      d3.select('svg').selectAll('.enemy')
+      .on('mouseenter', function() {
+        console.log('collision');
+      });
+      //when let go of drag, overwrite mouseenter event listener to stop collision detection
+      d3.select('svg').on('mouseup', function() {
+        d3.select('svg').selectAll('.enemy')
+        .on('mouseenter', null);
+        ballx = d3.select('.ball').attr('cx');
+        bally = d3.select('.ball').attr('cy');
+      });
     });
 
   ball.enter().append('circle')
     .attr('fill', 'green')
-    .attr('class', 'cursor')
+    .attr('class', 'ball')
     .attr('cx', 100)
     .attr('cy', 100)
     .attr('r', '10px')
@@ -91,20 +111,19 @@ var makeBall = function() {
   ;
 };
 
-
 var updateCursorPosition = function() {
   svg.on('mousemove', function() {
     cursorCoordinates = d3.mouse(this);
   });
 };
 
-
-var collisionDetect = function() {
-  //track mouse coordinates
-  //compare against enemy coordinates
-  //loop through enemy data
-
-  //if any enemy within n pixels of mouse, reset score
+var currentScore = function() {
+  var score = 0;
+  
+  setInterval(function() {
+    score++;
+    d3.select('.current > span').data(score).text(score);
+  }, 100);
 };
 
 var svg = d3.select('.board').append('svg')
@@ -113,7 +132,7 @@ var svg = d3.select('.board').append('svg')
 
 drawEnemies();
 setInterval(updateEnemyPositions, 1000);
-
+currentScore();
 updateCursorPosition();
 makeBall();
 
