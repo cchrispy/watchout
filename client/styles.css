@@ -2,10 +2,12 @@
 
 /* Note: an asteroid image is included in this repo.
 Feel free to use it if you like. */
-body {
-  background-color: grey;
+svg {
+  background-color: gold;
+  display: inline-block;
+  border: 2px solid black;
 }
 
-svg {
-  margin: 0, auto;
+.board {
+  text-align: center;
 }

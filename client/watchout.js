@@ -11,7 +11,7 @@
 //globals
 var height = 800;
 var width = 800;
-var numOfEnemies = 50;
+var numOfEnemies = 4;
 //refactor later
 var enemyData;
 var cursorCoordinates;
@@ -37,7 +37,7 @@ var drawEnemies = function() {
   enemyData = createEnemyData();
   d3.select('svg').selectAll('circle').data(enemyData)
     .enter().append('circle')
-    .attr('fill', 'red')
+    .attr('fill', 'white')
     .attr('class', 'enemy')
     .attr('cx', function(d) {
       return d.x;
@@ -45,7 +45,7 @@ var drawEnemies = function() {
     .attr('cy', function(d) {
       return d.y;
     })
-    .attr('r', '10px')
+    .attr('r', '100px')
     .on('mouseenter', function() {
       console.log('collision');
     })
@@ -68,23 +68,26 @@ var updateEnemyPositions = function() {
     .attr('cy', function(d) {
       return d.y;
     });
-  
-  console.log(d3.interpolate(1, 6)(2));
 };
 
-var makeCursor = function() {
-  d3.select('svg').selectAll('circle').data([{id: 'cursor'}], function(d) {
+var makeBall = function() {
+  var ball = d3.select('svg').selectAll('circle').data([{id: 'cursor'}], function(d) {
     return d.id;
-  })
-    .enter().append('circle')
+  });
+
+  var drag = d3.behavior.drag()
+    .on('drag', function() {
+      ball.attr('cx', cursorCoordinates[0]);
+      ball.attr('cy', cursorCoordinates[1]);
+    });
+
+  ball.enter().append('circle')
     .attr('fill', 'green')
     .attr('class', 'cursor')
-    .on('mousemove', function() {
-      // update the this.attr()
-      this.attr('cx', cursorCoordinates[0]);
-      this.attr('cy', cursorCoordinates[1]);
-    }.bind(this))
+    .attr('cx', 100)
+    .attr('cy', 100)
     .attr('r', '10px')
+    .call(drag)
   ;
 };
 
@@ -112,7 +115,10 @@ drawEnemies();
 setInterval(updateEnemyPositions, 1000);
 
 updateCursorPosition();
-makeCursor();
+makeBall();
+
+
+
 // on the board make enemies
 // data should be their {id: number, x: x, y: y}
 
