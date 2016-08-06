@@ -8,135 +8,135 @@
 6. Use css3 animations to make the enemies whirling shuriken.
 */
 
-gameRules = {
-  height: 800,
-  width: 800,
-  numOfEnemies: 4
-};
+// gameRules = {
+//   height: 800,
+//   width: 800,
+//   numOfEnemies: 4
+// };
 
-//refactor later
-var enemyData;
-var cursorCoordinates;
-var ballx;
-var bally;
+// //refactor later
+// var enemyData;
+// var cursorCoordinates;
+// var ballx;
+// var bally;
 
 
-var Enemy = function(id) {
-  this.x = Math.random() * gameRules.height;
-  this.y = Math.random() * gameRules.width;
-  //remove if necessary
-  this.id = id;
-};
+// var Enemy = function(id) {
+//   this.x = Math.random() * gameRules.height;
+//   this.y = Math.random() * gameRules.width;
+//   //remove if necessary
+//   this.id = id;
+// };
 
-var createEnemyData = function() {
-  var enemies = [];
-  for (var i = 0; i < gameRules.numOfEnemies; i++) {
-    enemies.push(new Enemy(i));
-  }
+// var createEnemyData = function() {
+//   var enemies = [];
+//   for (var i = 0; i < gameRules.numOfEnemies; i++) {
+//     enemies.push(new Enemy(i));
+//   }
 
-  return enemies;
-};
+//   return enemies;
+// };
 
-var drawEnemies = function() {
-  enemyData = createEnemyData();
-  d3.select('svg').selectAll('circle').data(enemyData)
-    .enter().append('circle')
-    .attr('fill', 'white')
-    .attr('class', 'enemy')
-    .attr('cx', function(d) {
-      return d.x;
-    })
-    .attr('cy', function(d) {
-      return d.y;
-    })
-    .attr('r', '100px')
-    /*
-    .on('mouseenter', function() {
-      //reset
-      //high score
-      console.log('collision');
-    })
-    */
-  ;
-};
+// var drawEnemies = function() {
+//   enemyData = createEnemyData();
+//   d3.select('svg').selectAll('circle').data(enemyData)
+//     .enter().append('circle')
+//     .attr('fill', 'white')
+//     .attr('class', 'enemy')
+//     .attr('cx', function(d) {
+//       return d.x;
+//     })
+//     .attr('cy', function(d) {
+//       return d.y;
+//     })
+//     .attr('r', '100px')
+//     /*
+//     .on('mouseenter', function() {
+//       //reset
+//       //high score
+//       console.log('collision');
+//     })
+//     */
+//   ;
+// };
 
-var updateEnemyPositions = function() {
-  enemyData = createEnemyData();
-  console.log(enemyData);
-  //select all enemies
-  d3.select('svg').selectAll('circle').data(enemyData)
-  //apply a transition so they move
-    .transition().duration(1000)
-  //update attributes cx and cy
-    .attr('cx', function(d) {
-      // check if x and y are touching the mouse
-      // then reset score
-      return d.x;
-    })
-    .attr('cy', function(d) {
-      return d.y;
-    });
-};
+// var updateEnemyPositions = function() {
+//   enemyData = createEnemyData();
+//   // console.log(enemyData);
+//   //select all enemies
+//   d3.select('svg').selectAll('circle').data(enemyData)
+//   //apply a transition so they move
+//     .transition().duration(1000)
+//   //update attributes cx and cy
+//     .attr('cx', function(d) {
+//       // check if x and y are touching the mouse
+//       // then reset score
+//       return d.x;
+//     })
+//     .attr('cy', function(d) {
+//       return d.y;
+//     });
+// };
 
-var makeBall = function() {
-  var ball = d3.select('svg').selectAll('circle').data([{id: 'ball'}], function(d) {
-    return d.id;
-  });
+// var makeBall = function() {
+//   var ball = d3.select('svg').selectAll('circle').data([{id: 'ball'}], function(d) {
+//     return d.id;
+//   });
 
-  //ball position update and collision detection
-  var drag = d3.behavior.drag()
-    .on('drag', function() {
-      ball.attr('cx', cursorCoordinates[0]);
-      ball.attr('cy', cursorCoordinates[1]);
+//   //ball position update and collision detection
+//   var drag = d3.behavior.drag()
+//     .on('drag', function() {
+//       ball.attr('cx', cursorCoordinates[0]);
+//       ball.attr('cy', cursorCoordinates[1]);
 
-      //apply collision detection when dragging
-      d3.select('svg').selectAll('.enemy')
-      .on('mouseenter', function() {
-        console.log('collision');
-      });
-      //when let go of drag, overwrite mouseenter event listener to stop collision detection
-      d3.select('svg').on('mouseup', function() {
-        d3.select('svg').selectAll('.enemy')
-        .on('mouseenter', null);
-        ballx = d3.select('.ball').attr('cx');
-        bally = d3.select('.ball').attr('cy');
-      });
-    });
+//       //apply collision detection when dragging
+//       d3.select('svg').selectAll('.enemy')
+//       .on('mouseenter', function() {
+//         console.log('collision');
+//       });
+//       //when let go of drag, overwrite mouseenter event listener to stop collision detection
+//       d3.select('svg').on('mouseup', function() {
+//         d3.select('svg').selectAll('.enemy')
+//         .on('mouseenter', null);
+//         ballx = d3.select('.ball').attr('cx');
+//         bally = d3.select('.ball').attr('cy');
+//       });
+//     });
 
-  ball.enter().append('circle')
-    .attr('fill', 'green')
-    .attr('class', 'ball')
-    .attr('cx', 100)
-    .attr('cy', 100)
-    .attr('r', '10px')
-    .call(drag)
-  ;
-};
+//   ball.enter().append('circle')
+//     .attr('fill', 'green')
+//     .attr('class', 'ball')
+//     .attr('cx', 100)
+//     .attr('cy', 100)
+//     .attr('r', '10px')
+//     .call(drag)
+//   ;
+// };
 
-var updateCursorPosition = function() {
-  svg.on('mousemove', function() {
-    cursorCoordinates = d3.mouse(this);
-  });
-};
+// var updateCursorPosition = function() {
+//   svg.on('mousemove', function() {
+//     cursorCoordinates = d3.mouse(this);
+//   });
+// };
 
-var currentScore = function() {
-  var score = 0;
+// var currentScore = function() {
+//   var score = 0;
   
-  setInterval(function() {
-    score++;
-    d3.select('.current > span').data(score).text(score);
-  }, 100);
-};
+//   setInterval(function() {
+//     score++;
+//     d3.select('.current > span').data(score).text(score);
+//   }, 100);
+// };
 
-var svg = d3.select('.board').append('svg')
-                  .attr('height', gameRules.height)
-                  .attr('width', gameRules.width);
+// var svg = d3.select('.board').append('svg')
+//                   .attr('height', gameRules.height)
+//                   .attr('width', gameRules.width);
 
-drawEnemies();
-setInterval(updateEnemyPositions, 1000);
-currentScore();
-updateCursorPosition();
-makeBall();
+// drawEnemies();
+// setInterval(updateEnemyPositions, 1000);
+// currentScore();
+// updateCursorPosition();
+// makeBall();
 
 
 
@@ -159,3 +159,87 @@ makeBall();
 
 
 // <circle cx="x" cy="y" fill="black" r="20">
+
+
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////
+
+
+gameBoard = {
+  width: 600,
+  height: 600,
+  enemies: 10
+}
+
+var svg = d3.select('.board').append('svg')
+  .attr('width', gameBoard.width)
+  .attr('height', gameBoard.height);
+
+svg.selectAll('circle').data(_.range(1, gameBoard.enemies))
+  .enter()
+  .append('circle')
+  .attr('fill', 'black')
+  .attr('r', 10)
+  .attr('class', 'enemy')
+  .attr('cx', function(d) {
+    return 10 + Math.random() * (gameBoard.width-20);
+  })
+  .attr('cy', function(d) {
+    return 10 + Math.random() * (gameBoard.height-20);
+  });
+
+var drag = d3.behavior.drag()
+// drag behavior function adds listeners to objects that .call() it
+            .on('dragstart', function() {
+              console.log('dragstart');
+            })
+            .on('drag', function() {
+// drag creates d3.event object, with x&y position of mouse              
+              d3.select('.player').attr('cx', function() {
+                if (d3.event.x < 10) {
+                  return 10
+                } else if (d3.event.x > gameBoard.width-10) {
+                  return gameBoard.width-10;
+                } else { return d3.event.x; }
+              });
+              d3.select('.player').attr('cy', function() {
+                if (d3.event.y < 10) {
+                  return 10;
+                } else if (d3.event.y > gameBoard.height-10) {
+                  return gameBoard.height - 10;
+                } else { return d3.event.y; }
+              });
+              console.log('dragging');
+            })
+            .on('dragend', function() {
+              console.log('dragend');
+            })
+
+var player = svg.selectAll('circle').data([{player: 'green'}],
+    function(d) { return d.player })
+  .enter()
+  .append('circle')
+  .attr('class', 'player')
+  .attr('fill', function(d) {
+    return d.player;
+  })
+  .attr('r', 10)
+  .attr('cx', gameBoard.width/2)
+  .attr('cy', gameBoard.height/2)
+  .call(drag); // drag event listeners added
+
+function update() {
+  svg.selectAll('circle.enemy')
+    .transition().duration(1000)
+    .attr('cx', function(d) {
+      return 10 + Math.random() * (gameBoard.width-20);
+    })
+    .attr('cy', function(d) {
+      return 10 + Math.random() * (gameBoard.width-20);
+    });
+}
+
+setInterval(update, 1500);
