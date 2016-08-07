@@ -5,14 +5,28 @@ var newData = [];
 var graph = d3.select('#graph').append('svg')
   .attr('height', 700).attr('width', 700);
 
-var xScale = d3.scale.linear().range([60, 700 - 60]).domain([2000, 2010]);
+var xScale = d3.scale.linear().range([80, 700 - 60]).domain([2000, 2010]);
 var yScale = d3.scale.linear().range([700 - 60, 60]).domain([12000, 16000]);
 var xAxis = d3.svg.axis().scale(xScale);
 var yAxis = d3.svg.axis().scale(yScale).orient('left');
 
 graph.append('svg:g').attr('transform', 'translate(0,' + (700 - 60) + ')').call(xAxis);
-graph.append('svg:g').attr('transform', 'translate(' + (60) + ', 0)').call(yAxis);
+graph.append('svg:g').attr('transform', 'translate(' + (80) + ', 0)').call(yAxis);
 
+graph.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('transform', 'translate(20,350)rotate(-90)')
+  .text('Inmates');
+
+graph.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('transform', 'translate(350,700)')
+  .text('Year');
+
+graph.append('text')
+  .attr('text-anchor', 'middle')
+  .attr('transform', 'translate(370, 90)')
+  .text('Average Daily Inmate Population Per Year');
 
 var testing = function(something, json) {
   //create array for line
